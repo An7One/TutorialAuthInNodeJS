@@ -1,10 +1,11 @@
-var express = require('express')
+import express from 'express'
 var router = express.Router()
-var User = require('../models/user')
+import User from '../models/user'
 
 // GET route to read data
 router.get('/', function (req, res, next) {
-    return res.sendFile(path.join(__dirname + '/templateLogReg/index.html'));
+    return res.sendFile(path.join(__dirname
+        + '/templateLogReg/index.html'));
 });
 
 // POST route to update data

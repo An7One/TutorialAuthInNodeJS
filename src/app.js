@@ -1,11 +1,16 @@
-var express = require('express')
-var app = express()
-var bodyParser = require('body-parser')
-var mongoose = require('mongoose')
-var session = require('express-session')
-var MongoStore = require('connect-mongo')(session)
+import express from 'express'
+import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
+import session from 'express-session'
+import connectMongo from 'connect-mongo'
+import path from 'path'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
 
+const app = express()
 const PORT = 3008
+
+const MongoStore = connectMongo(session)
 
 // to connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/testForAuth',
@@ -20,6 +25,12 @@ db.on('error', console.error.bind(console, 'connection error'))
 db.once('open', () => {
     console.log("MongoDB has been connected")
 })
+
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, '../public')))
 
 // to use sessions to track login
 app.use(session({
@@ -56,7 +67,4 @@ app.use((err, req, res, next) => {
     res.send(err.message)
 })
 
-// to listen to port 3008
-app.listen(PORT, () => {
-    console.log(`Express app listening on port ${PORT}`)
-})
+module.exports = app

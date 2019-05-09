@@ -4,18 +4,39 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app",
-    "watch": "nodemon app"
+    "build": "babel ./src --out-dir dist",
+    "clean": "rimraf dist",
+    "dev": "SET NODE_ENV=development & npm-run-all server",
+    "server": "babel-node ./src/bin/www",
+    "server:prod": "node ./dist/bin/www",
+    "start": "node ./bin/www",
+    "prod": "SET NODE_ENV=production & npm-run-all clean build server:prod",
+    "watch": "nodemon"
   },
   "author": "Leon",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
+    "debug": "^4.1.1",
+    "nodemon": "^1.19.0"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "connect-mongo": "^2.0.3",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
+    "http": "0.0.0",
     "mongoose": "^5.5.6",
-    "nodemon": "^1.19.0"
+    "morgan": "^1.9.1",
+    "npm-run-all": "^4.1.5",
+    "path": "^0.12.7",
+    "rimraf": "^2.6.3"
   }
 }
