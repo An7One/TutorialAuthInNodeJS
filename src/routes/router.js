@@ -3,13 +3,13 @@ var router = express.Router()
 import User from '../models/user'
 
 // GET route to read data
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     return res.sendFile(path.join(__dirname
         + '/templateLogReg/index.html'));
 });
 
 // POST route to update data
-router.post('/', function (req, res, next) {
+router.post('/', (req, res, next) => {
     if (req.body.password != req.body.passwordConf) {
         var err = new Error('Password does not match');
         err.status = 400;
@@ -28,7 +28,7 @@ router.post('/', function (req, res, next) {
             password: req.body.password,
         }
 
-        User.create(userData, function (err, user) {
+        User.create(userData, (err, user) => {
             if (err) {
                 return next(err);
             } else {
@@ -37,16 +37,18 @@ router.post('/', function (req, res, next) {
             }
         });
     } else if (req.body.logemail && req.body.logpassword) {
-        User.authenticate(req.body.logemail, req.body.logpassword, function (err, user) {
-            if (err || !user) {
-                var err = new Error('Wrong email or password.');
-                err.status = 401;
-                return next(err);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/profile');
-            }
-        });
+        User.authenticate(req.body.logemail,
+            req.body.logpassword,
+            (err, user) => {
+                if (err || !user) {
+                    var err = new Error('Wrong email or password.');
+                    err.status = 401;
+                    return next(err);
+                } else {
+                    req.session.userId = user._id;
+                    return res.redirect('/profile');
+                }
+            });
     } else {
         var err = new Error("All fields are required");
         err.status = 400;
@@ -55,9 +57,9 @@ router.post('/', function (req, res, next) {
 })
 
 // GET route after registration
-router.get('/profile', function (req, res, next) {
+router.get('/profile', (req, res, next) => {
     User.findById(req.session.userId)
-        .exec(function (err, user) {
+        .exec((err, user) => {
             if (err) {
                 return next(err)
             } else {
@@ -75,9 +77,9 @@ router.get('/profile', function (req, res, next) {
 })
 
 // GET to logout
-router.get('/logout', function (req, res, next) {
+router.get('/logout', (req, res, next) => {
     if (req.session) {
-        req.session.destroy(function (err) {
+        req.session.destroy((err) => {
             if (err) {
                 return next(err)
             } else {

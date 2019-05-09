@@ -26,11 +26,11 @@ db.once('open', () => {
     console.log("MongoDB has been connected")
 })
 
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../public')))
+app.use(cookieParser())
+app.use(logger('dev'))
 
 // to use sessions to track login
 app.use(session({
@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/templateLogReg'))
 
 // to include routes
-var routes = require('./routes/router')
+import routes from './routes/router'
 app.use('/', routes)
 
 // to catch 404 and forward to error handler
